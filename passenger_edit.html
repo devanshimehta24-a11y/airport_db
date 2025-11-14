@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Edit Passenger</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+  <style>
+    body { background: #f9fbfd; font-family: 'Segoe UI', sans-serif; }
+    form { max-width: 500px; margin: 2rem auto; background: white; padding: 1.5rem; border-radius: 8px; }
+    input, select { width: 100%; padding: 8px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc; }
+    button { background: #007bff; color: white; padding: 8px 14px; border: none; border-radius: 6px; }
+    a { display: block; margin-top: 1rem; color: #003366; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <form method="POST">
+    <h2>Edit Passenger</h2>
+    <input name="name" value="{{ passenger.Name }}" placeholder="Full Name" required>
+    <select name="gender">
+      <option {% if passenger.Gender == 'Male' %}selected{% endif %}>Male</option>
+      <option {% if passenger.Gender == 'Female' %}selected{% endif %}>Female</option>
+      <option {% if passenger.Gender == 'Other' %}selected{% endif %}>Other</option>
+    </select>
+    <label>DOB</label>
+    <input name="date_of_birth" type="date" value="{{ passenger.Date_of_Birth }}">
+    <input name="nationality" value="{{ passenger.Nationality }}" placeholder="Nationality">
+    <input name="passport_no" value="{{ passenger.Passport_No }}" placeholder="Passport No">
+    <input name="contact" value="{{ passenger.Contact }}" placeholder="Contact">
+    <button type="submit">Save Changes</button>
+    <a href="{{ url_for('admin_passengers_page') }}">← Back</a>
+  </form>
+</body>
+</html>

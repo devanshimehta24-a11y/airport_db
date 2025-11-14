@@ -1,0 +1,22 @@
+{% extends "admin.html" %}
+{% block content %}
+<h2 style="text-align:center; margin-top:20px;">Edit Airplane Details</h2>
+
+<div style="width:60%; margin:auto; margin-top:30px;">
+  <form method="POST">
+    <label>Airline Name:</label>
+    <input type="text" name="airline_name" value="{{ airplane.Airline_Name }}" required>
+
+    <label>Model:</label>
+    <input type="text" name="model" value="{{ airplane.Model }}" required>
+
+    <label>Seating Capacity:</label>
+    <input type="number" name="seating_capacity" value="{{ airplane.Seating_Capacity }}" required>
+
+    <label>Country:</label>
+    <input type="text" name="country" value="{{ airplane.Country }}" required>
+
+    <button type="submit" class="primary">Update Airplane</button>
+  </form>
+</div>
+{% endblock %}

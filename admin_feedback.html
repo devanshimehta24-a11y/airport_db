@@ -1,0 +1,129 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Feedback | Airport Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #f8f9fa; }
+    .card { border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+    .table th { background-color: #343a40; color: white; }
+    .btn-sm { border-radius: 8px; }
+    .rating-high { background-color: #d4edda; }     /* green */
+    .rating-medium { background-color: #fff3cd; }   /* yellow */
+    .rating-low { background-color: #f8d7da; }      /* red */
+  </style>
+</head>
+<body>
+
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="fw-bold">Passenger Feedbacks</h3>
+    <a href="/admin" class="btn btn-secondary btn-sm">← Back to Dashboard</a>
+  </div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <div class="card p-3">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Passenger Name</th>
+          <th>Comment</th>
+          <th>Rating</th>
+          <th>Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for f in feedbacks %}
+        {% set row_class = 'rating-high' if f.Rating >= 4 else ('rating-medium' if f.Rating >= 3 else 'rating-low') %}
+        <tr class="{{ row_class }}">
+          <td>{{ f.Feedback_ID }}</td>
+          <td>{{ f.Passenger_Name }}</td>
+          <td>{{ f.Comment }}</td>
+          <td><strong>{{ f.Rating }}</strong></td>
+          <td>{{ f.Feedback_Date }}</td>
+          <td>
+            <a href="/feedback/delete/{{ f.Feedback_ID }}" class="btn btn-danger btn-sm"
+               onclick="return confirm('Delete this feedback?')">Delete</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="text-center text-muted">No feedbacks found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Admin — Feedback Overview</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Passenger Feedbacks</h2>
+      <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-danger">Back to Dashboard</a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show">{{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% if feedbacks %}
+      <table class="table table-striped shadow-sm">
+        <thead class="table-primary">
+          <tr>
+            <th>ID</th>
+            <th>Passenger</th>
+            <th>Rating</th>
+            <th>Comment</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for fb in feedbacks %}
+            <tr>
+              <td>{{ fb.Feedback_ID }}</td>
+              <td>{{ fb.PassengerName }}</td>
+              <td>{{ fb.Rating }}</td>
+              <td>{{ fb.Comment }}</td>
+              <td>{{ fb.Feedback_Date }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="alert alert-info">No feedback found yet.</div>
+    {% endif %}
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+

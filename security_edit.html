@@ -1,0 +1,28 @@
+{% extends "admin.html" %}
+{% block content %}
+
+<h2 style="text-align:center; margin-top:20px;">Update Security Check</h2>
+
+<div style="width:60%; margin:auto; margin-top:30px;">
+  <form method="POST">
+    <label>Check Date:</label>
+    <input type="date" name="check_date" value="{{ check.Check_Date }}" required>
+
+    <label>Status:</label>
+    <select name="check_status" required>
+      <option value="Cleared" {% if check.Check_Status == 'Cleared' %}selected{% endif %}>Cleared</option>
+      <option value="Pending" {% if check.Check_Status == 'Pending' %}selected{% endif %}>Pending</option>
+      <option value="Flagged" {% if check.Check_Status == 'Flagged' %}selected{% endif %}>Flagged</option>
+    </select>
+
+    <label>Remarks:</label>
+    <input type="text" name="remarks" value="{{ check.Remarks }}">
+
+    <button type="submit" class="primary">Update Security Check</button>
+  </form>
+</div>
+
+{% endblock %}
+
+
+

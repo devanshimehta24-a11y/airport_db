@@ -1,0 +1,115 @@
+{% extends "admin.html" %}
+{% block content %}
+
+<header class="topbar">
+  <div>
+    <h2>Security Checks</h2>
+    <div class="sub">Manage passenger security clearances</div>
+  </div>
+</header>
+
+<section class="container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <!-- Quick Add Security Check -->
+  <div class="grid">
+    <section class="panel">
+      <h3>Add Security Check</h3>
+      <form method="POST" action="{{ url_for('add_security_check') }}">
+        <input type="number" name="check_id" placeholder="Check ID" required>
+        <input type="number" name="passenger_id" placeholder="Passenger ID" required>
+        <input type="number" name="flight_id" placeholder="Flight ID" required>
+        <label>Check Date:</label>
+        <input type="date" name="check_date" required>
+        <select name="check_status" required>
+          <option value="">Select Status</option>
+          <option value="Cleared">Cleared</option>
+          <option value="Pending">Pending</option>
+          <option value="Flagged">Flagged</option>
+        </select>
+        <input type="text" name="remarks" placeholder="Remarks (optional)">
+        <button type="submit" class="primary">Add Check</button>
+      </form>
+    </section>
+  </div>
+
+  <!-- Security Checks Table -->
+  <div class="preview">
+    <h3>Recent Security Checks</h3>
+    <table>
+      <!-- <thead>
+        {% for s in security %}
+<tr>
+  <td>{{ s.Check_ID }}</td>
+  <td>{{ s.Passenger_Name }}</td>
+  <td>{{ s.Flight_Name }}</td>
+  <td>{{ s.Check_Date }}</td>
+  <td>{{ s.Check_Status }}</td>
+  <td>{{ s.Remarks }}</td>
+</tr>
+{% endfor %} -->
+
+      <!-- </thead> -->
+      <tbody>
+        {% for s in security %}
+      <tr class="
+  {% if s.Check_Status == 'Cleared' %}row-cleared
+  {% elif s.Check_Status == 'Pending' %}row-pending
+  {% else %}row-flagged{% endif %}
+">
+
+          <td>{{ s.Check_ID }}</td>
+          <td>{{ s.Passenger_Name or s.Passenger_ID }}</td>
+          <td>{{ s.Flight_Code or s.Flight_ID }}</td>
+          <td>{{ s.Check_Date }}</td>
+          <td>{{ s.Check_Status }}</td>
+          <td>{{ s.Remarks or '-' }}</td>
+          <td>
+          <td>
+<a href="{{ url_for('edit_security_check', id=s.Check_ID) }}">Edit</a>
+
+  <a href="{{ url_for('delete_security_check', id=s.Security_ID) }}" class="btn btn-sm btn-danger">Delete</a>
+</td>
+
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<style>
+.btn-edit, .btn-delete {
+  padding: 6px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+  margin-right: 6px;
+}
+.btn-edit {
+  background: #007bff;
+  color: #fff;
+}
+.btn-edit:hover { background: #0056b3; }
+.btn-delete {
+  background: #dc3545;
+  color: #fff;
+}
+.btn-delete:hover { background: #a71d2a; }
+
+.row-cleared { background-color: #d4edda; }   /* light green */
+.row-pending { background-color: #fff3cd; }   /* light yellow */
+.row-flagged { background-color: #f8d7da; }   /* light red */
+
+
+</style>
+
+{% endblock %}
+

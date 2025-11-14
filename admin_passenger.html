@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Passengers | Admin Panel</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+  <style>
+    body { background: #f9fbfd; font-family: 'Segoe UI', sans-serif; }
+    .container { padding: 2rem; }
+    h2 { color: #003366; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; background: white; }
+    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #ddd; }
+    th { background: #eaf2fa; color: #003366; }
+    tr:hover { background: #f1f7ff; }
+    .actions { display: flex; gap: 8px; }
+    .btn { padding: 6px 10px; border-radius: 6px; text-decoration: none; font-size: 0.9rem; }
+    .btn-edit { background: #007bff; color: white; }
+    .btn-delete { background: #d9534f; color: white; }
+    .btn-back { background: #003366; color: white; display: inline-block; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Passenger Management</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Name</th><th>Age</th><th>Gender</th>
+          <th>DOB</th><th>Nationality</th><th>Contact</th><th>Passport</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in passengers %}
+        <tr>
+          <td>{{ p.Passenger_ID }}</td>
+          <td>{{ p.Name }}</td>
+          <td>{{ p.Age }}</td>
+          <td>{{ p.Gender }}</td>
+          <td>{{ p.Date_of_Birth }}</td>
+          <td>{{ p.Nationality }}</td>
+          <td>{{ p.Contact }}</td>
+          <td>{{ p.Passport_No }}</td>
+          <td class="actions">
+            <a href="{{ url_for('passenger_update', pid=p.Passenger_ID) }}" class="btn btn-edit">Edit</a>
+            <a href="{{ url_for('passenger_delete', pid=p.Passenger_ID) }}" class="btn btn-delete" onclick="return confirm('Delete this passenger?');">Delete</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-back">← Back to Dashboard</a>
+  </div>
+</body>
+</html>

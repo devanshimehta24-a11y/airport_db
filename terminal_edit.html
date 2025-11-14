@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Terminal</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f8fafc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .form-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 400px;
+    }
+    input, textarea {
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      background: #2563eb;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    button:hover {
+      background: #1e40af;
+    }
+  </style>
+</head>
+<body>
+  <form method="POST">
+    <div class="form-container">
+      <h2>Edit Terminal</h2>
+      <label>Name:</label>
+      <input type="text" name="name" value="{{ terminal.Name }}" required>
+
+      <label>Facility:</label>
+      <input type="text" name="facility" value="{{ terminal.Facility }}" required>
+
+      <label>Capacity:</label>
+      <input type="number" name="capacity" value="{{ terminal.Capacity }}" required>
+
+      <button type="submit">Update</button>
+    </div>
+  </form>
+</body>
+</html>
+

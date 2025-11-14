@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Airport Admin Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    /* Quick layout fixes */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+    .card {
+      text-align: center;
+      padding: 16px;
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 6px 18px rgba(8,12,20,0.04);
+    }
+    .card h4, .card h5 { color: #555; margin-bottom: 6px; }
+    .card .big, .card h2 { color: #1363a6; font-size: 26px; font-weight: 600; }
+    .card.danger .big, .card.danger h2 { color: #d32f2f; }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 18px;
+      margin-top: 20px;
+    }
+    .preview {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 16px rgba(8,12,20,0.05);
+      overflow-x: auto;
+      padding: 14px;
+    }
+    .preview table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .preview th, .preview td {
+      padding: 8px 10px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+      font-size: 13px;
+    }
+    .preview h4 { margin-bottom: 8px; color: #003366; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>A-DBMS</h1>
+        <p>Admin Panel</p>
+      </div>
+      <nav>
+        <a href="{{ url_for('admin_dashboard') }}">Overview</a>
+        <a href="{{ url_for('admin_passengers_page') }}">Passengers</a>
+        <a href="{{ url_for('flights_page') }}">Flights</a>
+        <a href="{{ url_for('bookings_page') }}">Bookings</a>
+         <a href="{{ url_for('airplane_page') }}">Avaialble Airlines</a>
+        <a href="{{ url_for('emergencies_page') }}">Emergencies</a>
+        <a href="{{ url_for('staff_page') }}">Staff</a>
+        <a href="{{ url_for('admin_feedback') }}">Feedback</a>
+        <a href="{{ url_for('baggage_page') }}"><i class="fas fa-suitcase-rolling"></i><span>Baggage</span></a>
+        <a href="{{ url_for('security_page') }}"><i class="fa fa-user-shield"></i> Security Check</a>
+      <a href="{{ url_for('admin_vendor') }}"><i class="fa fa-user-shield"></i> Vendor Info</a>
+         <a href="{{ url_for('admin_terminals') }}"><i class="fa fa-user-shield"></i>Terminal Info</a>
+<a href="{{ url_for('admin_gates') }}"><i class="fa fa-user-shield"></i>Gate Info</a>
+<a href="{{ url_for('admin_runways') }}"><i class="fa fa-user-shield"></i>Runway Info</a>
+      </nav>
+      <div class="sidebar-footer">
+        <small>Airport Management • India</small>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main-content">
+      {% block content %}
+      <header class="topbar">
+        <div>
+          <h2>Dashboard</h2>
+          <div class="sub">Mumbai Airport • Admin</div>
+        </div>
+        <div class="top-actions">
+          <a href="{{ url_for('login') }}" class="btn">Logout</a>
+          <a href="{{ url_for('admin_view') }}" class="btn">View Passenger Bookings</a>
+        </div>
+      </header>
+
+      <section class="container">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="flash">{{ messages[0] }}</div>
+          {% endif %}
+        {% endwith %}
+
+        <!-- Cards -->
+        <div class="cards">
+          <div class="card">
+            <h4>Total Flights</h4>
+            <div class="big">{{ flights_cnt }}</div>
+            <p class="muted">Schedules & Runways</p>
+          </div>
+          <div class="card">
+            <h4>Total Bookings</h4>
+            <div class="big">{{ bookings_cnt }}</div>
+            <p class="muted">Confirmed & Pending</p>
+          </div>
+          <div class="card">
+            <h4>Total Passengers</h4>
+            <div class="big">{{ passengers_cnt }}</div>
+            <p class="muted">Recent arrivals</p>
+          </div>
+          <div class="card danger">
+            <h4>Unresolved Emergencies</h4>
+            <div class="big">{{ unresolved_count }}</div>
+            <p class="muted">Requires attention</p>
+          </div>
+        </div>
+
+        <!-- Add Panels -->
+        <div class="grid">
+          <section class="panel">
+            <h3>Add Passenger</h3>
+            <form method="POST" action="{{ url_for('passenger_add') }}">
+              <input name="name" placeholder="Full name" required>
+              <select name="gender">
+                <option value="">Gender (optional)</option>
+                <option>Male</option><option>Female</option><option>Other</option>
+              </select>
+              <label>DOB</label>
+              <input name="date_of_birth" type="date" required>
+              <input name="nationality" placeholder="Nationality">
+              <input name="passport_no" placeholder="Passport No.">
+              <input name="contact" placeholder="Contact">
+              <button type="submit" class="primary">Add Passenger</button>
+            </form>
+          </section>
+
+          <section class="panel">
+            <h3>Add Flight</h3>
+            <form method="POST" action="{{ url_for('flight_add') }}">
+              <input name="Flight_ID" placeholder="Flight ID" required>
+              <input name="Departure_Airport" placeholder="From (IATA)">
+              <input name="Arrival_Airport" placeholder="To (IATA)">
+              <!-- <select name="airplane_id" required>
+  <option value="">-- Select Airplane --</option>
+  {% for a in airplanes %}
+    <option value="{{ a.Airplane_ID }}">{{ a.Airline_Name }} ({{ a.Airplane_ID }})</option>
+  {% endfor %}
+</select> -->
+
+              <label>Departure Time</label>
+              <input name="Departure_Time" type="datetime-local">
+              <label>Arrival Time</label>
+              <input name="Arrival_Time" type="datetime-local">
+              <input name="Flight_Status" placeholder="Status (On Time/Delayed)">
+              <button type="submit" class="primary">Add Flight</button>
+            </form>
+          </section>
+
+          <section class="panel">
+            <h3>Add Booking</h3>
+            <form method="POST" action="{{ url_for('add_booking') }}">
+              <input name="booking_id" placeholder="Booking ID (numeric)" required>
+
+              <input name="passenger_id" placeholder="Passenger ID (numeric)" required>
+              <input name="flight_id" placeholder="Flight ID (e.g. AI204)" required>
+              <input name="class" placeholder="Class (Economy/Business)">
+              <input name="price" placeholder="Price (numeric)">
+              <input type="date" class="form-control" name="Booking_Date" required>
+              <div class="mb-3">
+    <label>Seat Number</label>
+    <input type="text" name="seatno" class="form-control" required>
+  </div>
+              <button type="submit" class="primary">Add Booking</button>
+            </form>
+          </section>
+
+          <section class="panel">
+            <h3>Add Emergency</h3>
+            <form action="{{ url_for('emergency_add') }}" method="POST">
+              <input type="number" name="emergency_id" placeholder="Emergency ID" required>
+              <input type="text" name="type" placeholder="Type (e.g. Fire, Medical)" required>
+              <input type="text" name="location" placeholder="Location" required>
+              <input type="number" name="response_time" placeholder="Response Time (mins)" required>
+              <input type="text" name="resolution_status" placeholder="Resolution Status (e.g. Resolved, Pending)" required>
+              <input type="number" name="reported_by" placeholder="Reported By (Staff ID)" required>
+              <button type="submit" class="primary">Add Emergency</button>
+            </form>
+          </section>
+
+           
+    <!-- <a href="{{ url_for('admin_view') }}" class="btn">View Passenger Bookings</a> -->
+  
+
+        </div>
+
+   
+
+
+
+        <!-- Previews -->
+        <div class="preview-grid">
+          <div class="preview">
+            <h4>Recent Flights</h4>
+            <table>
+              <thead><tr><th>ID</th><th>From</th><th>To</th><th>Dep</th><th>Status</th></tr></thead>
+              <tbody>
+                {% for f in flights %}
+                <tr>
+                  <td>{{ f.Flight_ID }}</td>
+                  <td>{{ f.Departure_Airport }}</td>
+                  <td>{{ f.Arrival_Airport }}</td>
+                  <td>{{ f.Departure_Time }}</td>
+                  <td>{{ f.Status }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <a href="{{ url_for('flights_page') }}" class="view-all">View all flights →</a>
+          </div>
+
+          <div class="preview">
+            <h4>Recent Bookings</h4>
+            <table>
+              <thead><tr><th>ID</th><th>Passenger</th><th>Flight</th><th>Class</th><th>Price</th></tr></thead>
+              <tbody>
+                {% for b in bookings %}
+                <tr>
+                  <td>{{ b.Booking_ID }}</td>
+                  <td>{{ b.Passenger_ID }}</td>
+                  <td>{{ b.Flight_ID }}</td>
+                  <td>{{ b.Class }}</td>
+                  <td>{{ b.Price }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <a href="{{ url_for('bookings_page') }}" class="view-all">View all bookings →</a>
+          </div>
+
+          <div class="preview">
+            <h4>Recent Passengers</h4>
+            <table>
+              <thead><tr><th>ID</th><th>Name</th><th>Age</th><th>Contact</th></tr></thead>
+              <tbody>
+                {% for p in passengers %}
+                <tr>
+                  <td>{{ p.Passenger_ID }}</td>
+                  <td>{{ p.Name }}</td>
+                  <td>{{ p.Age }}</td>
+                  <td>{{ p.Contact }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <a href="{{ url_for('admin_passengers_page') }}" class="view-all">View all passengers →</a>
+          </div>
+
+          {% if staff %}
+          <div class="preview">
+            <h4>Staff Members</h4>
+            <table>
+              <thead><tr><th>ID</th><th>Name</th><th>Role</th><th>Shift</th></tr></thead>
+              <tbody>
+                {% for s in staff %}
+                <tr>
+                  <td>{{ s.Staff_ID }}</td>
+                  <td>{{ s.Name }}</td>
+                  <td>{{ s.Role }}</td>
+                  <td>{{ s.Shift }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <a href="{{ url_for('staff_page') }}" class="view-all">View all staff →</a>
+          </div>
+          {% endif %}
+
+          <div class="preview">
+            <h4>Emergencies</h4>
+            <table>
+              <thead><tr><th>ID</th><th>Type</th><th>Location</th><th>Status</th></tr></thead>
+              <tbody>
+                {% for e in emergencies %}
+                <tr>
+                  <td>{{ e.Emergency_ID }}</td>
+                  <td>{{ e.Type }}</td>
+                  <td>{{ e.Location }}</td>
+                  <td>{{ e.Resolution_Status }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <a href="{{ url_for('admin_emergency_page') }}" class="view-all">View all emergencies →</a>
+          </div>
+        </div>
+      </section>
+      {% endblock %}
+    </main>
+  </div>
+</body>
+</html>
+

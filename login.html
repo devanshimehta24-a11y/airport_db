@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Airport Management Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}" />
+</head>
+<body>
+  <div class="login-container">
+    <h1>Airport Management System</h1>
+
+    <!-- Modified form for Flask -->
+    <form action="/login" method="POST">
+      <label for="role">Login as:</label>
+      <select id="role" name="role" required>
+        <option value="admin">Admin</option>
+        <option value="passenger">Passenger</option>
+      </select>
+
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required />
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required />
+
+      <button type="submit">Login</button>
+    </form>
+
+    <!-- Flask can show error messages dynamically -->
+    {% if error %}
+      <p style="color:red; text-align:center;">{{ error }}</p>
+    {% endif %}
+  </div>
+</body>
+</html>
+

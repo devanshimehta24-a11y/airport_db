@@ -1,0 +1,71 @@
+{% extends "admin.html" %}
+{% block content %}
+
+<style>
+/* keep your styles (you can keep your CSS) */
+.staff-container { width: 85%; margin: 40px auto; }
+h2 { text-align:center; margin-bottom:20px; color:#2c3e50 }
+.staff-form{ background:#f9f9f9; padding:20px; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.1); margin-bottom:40px; }
+.staff-form input, .staff-form button { padding:10px; border:1px solid #ccc; border-radius:6px; }
+.staff-form input { width:180px }
+.staff-form button { background:#007bff; color:white; border:none; cursor:pointer; transition:0.3s }
+.staff-form button:hover { background:#0056b3 }
+table{ width:100%; border-collapse:collapse; text-align:center; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.05) }
+th{ background:#007bff; color:white; padding:12px }
+td{ padding:10px; border-bottom:1px solid #f1f1f1 }
+tr:hover { background:#f8f9fa }
+.actions a { text-decoration:none; padding:6px 12px; margin:0 3px; border-radius:5px; font-size:14px }
+.actions .edit { background:#28a745; color:#fff }
+.actions .delete { background:#dc3545; color:#fff }
+</style>
+
+<div class="staff-container">
+  <h2>Manage Staff</h2>
+
+  <!-- Add Staff -->
+  <form method="POST" action="{{ url_for('staff_page') }}" class="staff-form">
+    <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center;">
+      <input type="number" name="staff_id" placeholder="Staff ID" required>
+      <input type="text" name="name" placeholder="Full Name" required>
+      <input type="text" name="role" placeholder="Role (Security, Maintenance...)" required>
+      <input type="number" name="terminal_id" placeholder="Terminal ID" required>
+      <input type="text" name="shift" placeholder="Shift (Morning/Evening/Night)" required>
+      <input type="date" name="date_of_birth" required>
+      <input type="text" name="contact_number" placeholder="Contact Number">
+      <button type="submit">+ Add Staff</button>
+    </div>
+  </form>
+
+  <!-- Staff Table -->
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th><th>Name</th><th>Role</th><th>Terminal</th><th>Shift</th><th>DOB</th><th>Age</th><th>Contact</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in staff %}
+      <tr>
+        <td>{{ s.Staff_ID }}</td>
+        <td>{{ s.Name }}</td>
+        <td>{{ s.Role }}</td>
+        <td>{{ s.Terminal_ID }}</td>
+        <td>{{ s.Shift }}</td>
+        <td>{{ s.Date_of_Birth }}</td>
+        <td>{{ s.Age }}</td>
+        <td>{{ s.Contact_Number }}</td>
+        <td class="actions">
+          <a href="{{ url_for('edit_staff', id=s.Staff_ID) }}" class="edit">Edit</a>
+          <a href="{{ url_for('delete_staff', id=s.Staff_ID) }}" class="delete" onclick="return confirm('Delete this staff member?')">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
+
+
+
+

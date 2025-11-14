@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Passenger Bookings</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+  <div class="text-end mb-3">
+    <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+  </div>
+
+  <h2 class="text-center mb-4">Search Your Bookings</h2>
+
+  <form method="POST" class="card p-4 shadow-sm">
+    <div class="mb-3">
+      <label class="form-label">Search by:</label>
+      <select class="form-select" name="search_type" required>
+        <option value="">Select an option</option>
+        <option value="passenger_id">Passenger ID</option>
+        <option value="booking_id">Booking ID</option>
+        <option value="flight_id">Flight ID</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Enter ID:</label>
+      <input type="text" name="search_value" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Search</button>
+  </form>
+
+  {% if query_done %}
+    <hr>
+    {% if results %}
+      <h4 class="mt-4">Results:</h4>
+      <table class="table table-bordered table-striped mt-3">
+        <thead>
+          <tr>
+            <th>Booking ID</th>
+            <th>Passenger ID</th>
+            <th>Flight ID</th>
+            <th>Class</th>
+            <th>Seat No</th>
+            <th>Price</th>
+            <th>Booking Date</th>
+            <th>Departure</th>
+            <th>Arrival</th>
+            <th>Departure Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in results %}
+            <tr>
+              <td>{{ row.Booking_ID }}</td>
+              <td>{{ row.Passenger_ID }}</td>
+              <td>{{ row.Flight_ID }}</td>
+              <td>{{ row.Class }}</td>
+              <td>{{ row.SeatNo }}</td>
+              <td>{{ row.Price }}</td>
+              <td>{{ row.Booking_Date }}</td>
+              <td>{{ row.Departure_Airport }}</td>
+              <td>{{ row.Arrival_Airport }}</td>
+              <td>{{ row.Departure_Time }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="alert alert-warning mt-3">No bookings found for that ID.</div>
+    {% endif %}
+  {% endif %}
+
+  {% if error %}
+    <div class="alert alert-danger mt-3">{{ error }}</div>
+  {% endif %}
+</div>
+
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gate Management | Airport Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #f8f9fa; }
+    .container { margin-top: 40px; }
+    .card {
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      padding: 25px;
+    }
+    .btn-sm { border-radius: 6px; }
+    .status-available { background-color: #d4edda; }
+    .status-occupied { background-color: #f8d7da; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/admin" class="btn btn-secondary mb-3">← Back to Dashboard</a>
+      <form method="POST" action="{{ url_for('add_gate') }}">
+  <div class="mb-3">
+    <label>Gate ID</label>
+    <input type="number" class="form-control" name="Gate_ID" required>
+  </div>
+
+  <div class="mb-3">
+    <label>Gate Name</label>
+    <input type="text" class="form-control" name="Gate_Name" required>
+  </div>
+
+  <div class="mb-3">
+    <label>Terminal ID</label>
+    <input type="number" class="form-control" name="Terminal_ID" required>
+  </div>
+
+  <div class="mb-3">
+    <label>Flight ID</label>
+    <input type="number" class="form-control" name="Flight_ID">
+  </div>
+
+  <div class="mb-3">
+    <label>Status</label>
+    <select class="form-select" name="Status" required>
+      <option value="Available">Available</option>
+      <option value="Occupied">Occupied</option>
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Add Gate</button>
+</form>
+
+    <div class="card">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold">Gate Management</h3>
+       
+
+      <table class="table table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Gate ID</th>
+            <th>Gate Name</th>
+            <th>Terminal ID</th>
+            <th>Flight ID</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for g in gates %}
+          <tr class="{% if g.Status == 'Available' %}status-available{% else %}status-occupied{% endif %}">
+            <td>{{ g.Gate_ID }}</td>
+            <td>{{ g.Gate_Name }}</td>
+            <td>{{ g.Terminal_ID }}</td>
+            <td>{{ g.Flight_ID or '—' }}</td>
+            <td>{{ g.Status }}</td>
+            <td>
+              <a href="/gate_edit/{{ g.Gate_ID }}" class="btn btn-warning btn-sm">Edit</a>
+              <a href="/delete_gate/{{ g.Gate_ID }}" class="btn btn-danger btn-sm" onclick="return confirm('Delete this gate?');">Delete</a>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="6" class="text-center text-muted">No gates found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

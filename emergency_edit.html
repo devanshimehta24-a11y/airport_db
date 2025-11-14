@@ -1,0 +1,39 @@
+{% extends "admin.html" %}
+{% block content %}
+
+<section class="container">
+  <div class="panel" style="max-width:600px; margin:auto; margin-top:40px;">
+    <h3 style="text-align:center; color:var(--blue-900); margin-bottom:18px;">Update Emergency</h3>
+
+    <form method="POST">
+      <label>Type:</label>
+      <input type="text" name="type" value="{{ emergency.Type }}" required>
+
+      <label>Location:</label>
+      <input type="text" name="location" value="{{ emergency.Location }}" required>
+
+      <label>Response Time (minutes):</label>
+      <input type="number" name="response_time" value="{{ emergency.Response_Time }}" required>
+
+      <label>Resolution Status:</label>
+      <select name="resolution_status" required>
+        <option value="Pending" {% if emergency.Resolution_Status == 'Pending' %}selected{% endif %}>Pending</option>
+        <option value="In Progress" {% if emergency.Resolution_Status == 'In Progress' %}selected{% endif %}>In Progress</option>
+        <option value="Resolved" {% if emergency.Resolution_Status == 'Resolved' %}selected{% endif %}>Resolved</option>
+      </select>
+
+      <label>Reported By (Staff ID):</label>
+      <input type="number" name="reported_by" value="{{ emergency.Reported_By }}" required>
+
+      <button type="submit" class="primary" style="margin-top:12px;">Update Emergency</button>
+    </form>
+
+    <div style="text-align:center; margin-top:16px;">
+      <a href="{{ url_for('emergencies_page') }}" style="color:var(--blue-700); text-decoration:none;">← Back to Emergencies</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+

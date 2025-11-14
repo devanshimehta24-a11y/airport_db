@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Passenger Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <div class="navbar">
+    <h2>Welcome, Passenger</h2>
+    <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+  </div>
+
+  <div class="dashboard-container">
+    <h1>Airport Management System</h1>
+    <div class="card-container">
+      <a href="{{ url_for('passenger_bookings') }}" class="card">
+        <h3>✈️ View My Bookings</h3>
+        <p>Check your flight details and status.</p>
+      </a>
+      <a href="{{ url_for('feedback') }}" class="card">
+        <h3>📝 Give Feedback</h3>
+        <p>Share your travel experience with us.</p>
+      </a>
+    </div>
+  </div>
+</body>
+</html>
+
+
+
+

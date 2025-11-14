@@ -1,0 +1,94 @@
+{% extends "admin.html" %}
+{% block content %}
+<h2 style="text-align:center; margin-top:25px;">Manage Emergencies</h2>
+
+<style>
+  .emergency-table {
+    width: 90%;
+    margin: 30px auto;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .emergency-table th, .emergency-table td {
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+
+  .emergency-table th {
+    background-color: #f4f4f4;
+  }
+
+  /* Status-based row colors */
+  .row-resolved {
+    background-color: #d4edda;
+  }
+  .row-inprogress {
+    background-color: #fff3cd;
+  }
+  .row-unresolved {
+    background-color: #f8d7da;
+  }
+
+  /* Hover and buttons */
+  .emergency-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  .action-btn {
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    margin: 0 3px;
+    color: white;
+    font-size: 13px;
+  }
+  .edit-btn { background-color: #3498db; }
+  .delete-btn { background-color: #e74c3c; }
+  .edit-btn:hover { background-color: #2980b9; }
+  .delete-btn:hover { background-color: #c0392b; }
+</style>
+
+<!-- Emergency Table -->
+<div style="overflow-x:auto;">
+  <table class="emergency-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Type</th>
+        <th>Location</th>
+        <th>Response Time (min)</th>
+        <th>Status</th>
+        <th>Reported By</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for e in emergencies %}
+      <tr class="{{ e.status_class }}">
+        <td>{{ e.Emergency_ID }}</td>
+        <td>{{ e.Type }}</td>
+        <td>{{ e.Location }}</td>
+        <td>{{ e.Response_Time }}</td>
+        <td style="font-weight:600;">{{ e.Resolution_Status }}</td>
+        <td>{{ e.Reported_By }}</td>
+        <td>
+          <a href="{{ url_for('emergency_update', emergency_id=e.Emergency_ID) }}" class="action-btn edit-btn">Edit</a>
+          <a href="{{ url_for('emergency_delete', emergency_id=e.Emergency_ID) }}" class="action-btn delete-btn" onclick="return confirm('Delete this emergency?')">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+

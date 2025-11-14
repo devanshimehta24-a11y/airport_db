@@ -1,0 +1,76 @@
+{% extends "admin.html" %}
+{% block content %}
+<header class="topbar">
+  <div>
+    <h2>Baggage Management</h2>
+    <div class="sub">Track, add, or update passenger baggage</div>
+  </div>
+  <a href="{{ url_for('admin_dashboard') }}" class="btn">Back to Dashboard</a>
+</header>
+
+<section class="container">
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="flash">{{ messages[0] }}</div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Add Baggage Form -->
+  <div class="grid">
+    <section class="panel">
+      <h3>Add New Baggage</h3>
+      <form action="{{ url_for('add_baggage') }}" method="POST">
+        <input type="number" name="baggage_id" placeholder="Baggage ID" required>
+        <input type="number" name="passenger_id" placeholder="Passenger ID" required>
+        <input type="text" name="weight" placeholder="Weight (e.g. 23.5)" required>
+        <input type="text" name="status" placeholder="Status (Checked-In/In Transit/Delivered)" required>
+        <input type="text" name="destination" placeholder="Destination" required>
+        <input type="text" name="tag_no" placeholder="Baggage Tag No." required>
+        <button type="submit" class="primary">Add Baggage</button>
+      </form>
+    </section>
+  </div>
+
+  <!-- Existing Baggage Table -->
+  <div class="preview">
+    <h4>All Baggage Records</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Passenger ID</th>
+          <th>Weight</th>
+          <th>Status</th>
+          <th>Destination</th>
+          <th>Tag No</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in baggage %}
+        <tr>
+          <td>{{ b.Baggage_ID }}</td>
+          <td>{{ b.Passenger_ID }}</td>
+          <td>{{ b.Weight }}</td>
+          <td>{{ b.Status }}</td>
+          <td>{{ b.Destination }}</td>
+          <td>{{ b.Tag_No }}</td>
+          <td>
+  <div class="action-buttons">
+    <a href="{{ url_for('edit_baggage', id=b.Baggage_ID) }}" class="btn-edit">
+      <i class="fa fa-pen"></i> Edit
+    </a>
+    <a href="{{ url_for('delete_baggage', id=b.Baggage_ID) }}" class="btn-delete">
+      <i class="fa fa-trash"></i> Delete
+    </a>
+  </div>
+</td>
+
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}
+

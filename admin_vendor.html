@@ -1,0 +1,138 @@
+
+
+
+
+{% extends "admin.html" %}
+{% block content %}
+
+<h2 style="text-align:center; margin-top:20px;">Vendor Management</h2>
+
+<div class="card" style="width:90%; margin:auto; margin-top:25px; padding:25px; box-shadow:0 4px 10px rgba(0,0,0,0.1); border-radius:10px;">
+  <h4 style="margin-bottom:20px;">Add New Vendor</h4>
+
+  <form method="POST" action="{{ url_for('add_vendor') }}" class="form-grid">
+    <div>
+      <label>Vendor ID:</label>
+      <input type="number" name="vendor_id" required>
+    </div>
+    <div>
+      <label>Vendor Name:</label>
+      <input type="text" name="vendor_name" required>
+    </div>
+    <div>
+      <label>Service Type:</label>
+      <select name="service_type" required>
+        <option value="Food">Food</option>
+        <option value="Retail">Retail</option>
+        <option value="Duty Free">Duty Free</option>
+        <option value="Lounge">Lounge</option>
+        <option value="Transport">Transport</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <div>
+      <label>Terminal ID:</label>
+      <input type="number" name="terminal_id" required>
+    </div>
+    <div>
+      <label>Contact Number:</label>
+      <input type="text" name="contact_number">
+    </div>
+    <div>
+      <label>License Expiry:</label>
+      <input type="date" name="license_expiry" required>
+    </div>
+    <div style="text-align:center; grid-column:span 2;">
+      <button type="submit" class="btn-primary">Add Vendor</button>
+    </div>
+  </form>
+</div>
+
+<br>
+
+<div style="width:95%; margin:auto; margin-top:40px;">
+  <h4 style="text-align:center; margin-bottom:15px;">All Vendors</h4>
+
+  <table style="width:100%; border-collapse:collapse; text-align:center;">
+    <thead style="background-color:#007bff; color:white;">
+      <tr>
+        <th>Vendor ID</th>
+        <th>Name</th>
+        <th>Service Type</th>
+        <th>Terminal</th>
+        <th>Contact</th>
+        <th>License Expiry</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for v in vendor %}
+      <tr class="
+        {% if v.License_Expiry is none %}
+          row-noexpiry
+        {% elif v.License_Expiry < current_date %}
+          row-expired
+        {% elif v.License_Expiry < warning_date %}
+          row-warning
+        {% else %}
+          row-ok
+        {% endif %}
+      ">
+        <td>{{ v.Vendor_ID }}</td>
+        <td>{{ v.Vendor_Name }}</td>
+        <td>{{ v.Service_Type }}</td>
+        <td>{{ v.Terminal_ID }}</td>
+        <td>{{ v.Contact_Number or '-' }}</td>
+        <td>{{ v.License_Expiry or '-' }}</td>
+       <td>
+                    <a href="{{ url_for('edit_vendor',id=v.Vendor_ID) }}" class="btn btn-sm btn-danger">Edit</a>
+                    <a href="{{ url_for('delete_vendor',id=v.Vendor_ID) }}" class="btn btn-sm btn-danger"
+                       onclick="return confirm('Delete this booking?')">Delete</a>
+                </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<style>
+.form-grid {
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap:15px;
+}
+.form-grid input, .form-grid select {
+  width:100%;
+  padding:8px;
+  border:1px solid #ccc;
+  border-radius:6px;
+}
+.btn-primary {
+  background-color:#007bff;
+  color:white;
+  padding:8px 16px;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+}
+.btn-primary:hover { background-color:#0056b3; }
+
+.btn-edit, .btn-delete {
+  padding:5px 10px;
+  border-radius:5px;
+  text-decoration:none;
+  color:white;
+}
+.btn-edit { background-color:#28a745; }
+.btn-delete { background-color:#dc3545; }
+.btn-edit:hover { background-color:#218838; }
+.btn-delete:hover { background-color:#c82333; }
+
+/* vendor expiry colors */
+.row-expired { background-color:#f8d7da; }
+.row-warning { background-color:#fff3cd; }
+.row-ok { background-color:#d4edda; }
+.row-noexpiry { background-color:#e9ecef; }
+</style>
+
+{% endblock %}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Passenger–Booking–Flight View</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <!-- <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a> -->
+    <div class="d-flex">
+      <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-light">Back to Dashboard</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <h2 class="mb-3 text-center text-primary">Passenger–Booking–Flight View</h2>
+
+  {% if data %}
+  <div class="table-responsive shadow rounded bg-white p-3">
+    <table class="table table-hover align-middle table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>Passenger ID</th>
+          <th>Name</th>
+          <th>Booking ID</th>
+          <th>Flight ID</th>
+          <th>Departure</th>
+          <th>Arrival</th>
+          <th>Departure Time</th>
+          <th>Arrival Time</th>
+          <th>Class</th>
+          <th>Seat No</th>
+          <th>Booking Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in data %}
+        <tr>
+          <td>{{ row.Passenger_ID }}</td>
+          <td>{{ row.Passenger_Name }}</td>
+          <td>{{ row.Booking_ID }}</td>
+          <td>{{ row.Flight_ID }}</td>
+          <td>{{ row.Departure_Airport }}</td>
+          <td>{{ row.Arrival_Airport }}</td>
+          <td>{{ row.Departure_Time }}</td>
+          <td>{{ row.Arrival_Time }}</td>
+          <td>{{ row.Class }}</td>
+          <td>{{ row.SeatNo }}</td>
+          <td>{{ row.Booking_Date.strftime('%Y-%m-%d') if row.Booking_Date else '' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <div class="alert alert-warning text-center">No data found in PassengerBookings view.</div>
+  {% endif %}
+</div>
+
+</body>
+</html>

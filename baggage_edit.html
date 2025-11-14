@@ -1,0 +1,38 @@
+{% extends "admin.html" %}
+{% block content %}
+
+<header class="topbar">
+  <div>
+    <h2>Update Baggage</h2>
+    <div class="sub">Modify baggage details and current status</div>
+  </div>
+  <a href="{{ url_for('baggage_page') }}" class="btn">Back to Baggage</a>
+</header>
+
+<section class="container">
+  <div class="grid" style="max-width:600px;margin:auto;">
+    <section class="panel">
+      <h3>Edit Baggage #{{ baggage.Baggage_ID }}</h3>
+      <form method="POST">
+        <label>Weight (kg):</label>
+        <input type="text" name="weight" value="{{ baggage.Weight }}" required>
+
+        <label>Status:</label>
+        <select name="status" required>
+          <option value="Checked-In" {% if baggage.Status == 'Checked-In' %}selected{% endif %}>Checked-In</option>
+          <option value="In Transit" {% if baggage.Status == 'In Transit' %}selected{% endif %}>In Transit</option>
+          <option value="Delivered" {% if baggage.Status == 'Delivered' %}selected{% endif %}>Delivered</option>
+          <option value="Lost" {% if baggage.Status == 'Lost' %}selected{% endif %}>Lost</option>
+        </select>
+
+        <label>Destination:</label>
+        <input type="text" name="destination" value="{{ baggage.Destination }}" required>
+
+        <button type="submit" class="primary">Save Changes</button>
+      </form>
+    </section>
+  </div>
+</section>
+
+{% endblock %}
+

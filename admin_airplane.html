@@ -1,0 +1,72 @@
+{% extends "admin.html" %}
+{% block content %}
+<style>
+  .airplane-container { width: 85%; margin: 40px auto; }
+  h2 { text-align:center; margin-bottom:20px; color:#2c3e50; }
+  .airplane-form { background:#f9f9f9; padding:20px; border-radius:12px;
+                   box-shadow:0 2px 6px rgba(0,0,0,0.1); margin-bottom:40px; }
+  .airplane-form input, .airplane-form button {
+    padding:10px; border:1px solid #ccc; border-radius:6px;
+  }
+  .airplane-form input { width:180px; }
+  .airplane-form button {
+    background:#007bff; color:white; border:none; cursor:pointer; transition:0.3s;
+  }
+  .airplane-form button:hover { background:#0056b3; }
+  table { width:100%; border-collapse:collapse; text-align:center; background:#fff;
+          border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
+  th { background:#007bff; color:white; padding:12px; }
+  td { padding:10px; border-bottom:1px solid #f1f1f1; }
+  tr:hover { background-color:#f8f9fa; }
+  .actions a {
+    text-decoration:none; padding:6px 12px; margin:0 3px; border-radius:5px; font-size:14px;
+  }
+  .actions .edit { background-color:#28a745; color:white; }
+  .actions .delete { background-color:#dc3545; color:white; }
+</style>
+
+<div class="airplane-container">
+  <h2>Manage Airplanes</h2>
+
+  <!-- Add Airplane -->
+  <form method="POST" action="{{ url_for('airplane_page') }}" class="airplane-form">
+    <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center;">
+      <input name="airplane_id" placeholder="Airplane ID" required>
+      <input name="airline_name" placeholder="Airline Name" required>
+      <input name="model" placeholder="Model" required>
+      <input type="number" name="seating_capacity" placeholder="Seating Capacity" required>
+      <input name="country" placeholder="Country" required>
+      <button type="submit">+ Add Airplane</button>
+    </div>
+  </form>
+
+  <!-- Airplane Table -->
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Airline</th>
+        <th>Model</th>
+        <th>Capacity</th>
+        <th>Country</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in airplanes %}
+      <tr>
+        <td>{{ a.Airplane_ID }}</td>
+        <td>{{ a.Airline_Name }}</td>
+        <td>{{ a.Model }}</td>
+        <td>{{ a.Seating_Capacity }}</td>
+        <td>{{ a.Country }}</td>
+        <td class="actions">
+          <a href="{{ url_for('edit_airplane', id=a.Airplane_ID) }}" class="edit">Edit</a>
+          <a href="{{ url_for('delete_airplane', id=a.Airplane_ID) }}" class="delete" onclick="return confirm('Delete this airplane?')">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
